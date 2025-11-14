@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Documentos - Tribunal Laboral</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'generador_docs/css/style.css' %}">
+    <script src="{% static 'generador_docs/js/vista-previa.js' %}" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Generador de Documentos</h1>
+            <p>Sistema oficial del Tribunal Laboral del Poder Judicial</p>
+            <div class="theme-toggle">
+                <button id="themeToggle" class="btn-theme">
+                    <div class="icon-container">
+                        <span class="sun">☀️</span>
+                        <span class="moon">🌙</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="two-column-layout">
+            <!-- COLUMNA IZQUIERDA - FORMULARIO -->
+            <div class="column">
+                <form method="post" action="{% url 'generar_documento' %}" id="documentForm">
+                    {% csrf_token %}
+                    
+                    <div class="field-group">
+                        <h3>Tipo de Documento</h3>
+                        <div class="form-group">
+                            <label for="tipo_documento">Seleccione el tipo de documento:</label>
+                            <select name="TIPO_DOCUMENTO" id="tipo_documento" required>
+                                <option value="desistimiento">📄 Desistimiento de Acción</option>
+                                <option value="desistimiento_sin_efectos">📋 Desistimiento Sin Efectos de Audiencia</option>
+                                <option value="pago_efectivo">💵 Pago en Efectivo</option>
+                                <option value="pago_transferencia">🏦 Pago por Transferencia</option>
+                                <option value="pago_cheque">📊 Pago con Cheque</option>
+                                <option value="pago_cumplido">✅ Constancia de Pago Cumplido</option>
+                                <option value="pago_parcial_cheque">📝 Pago Parcial con Cheque</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <h3>Datos del Expediente</h3>
+                        
+                        <div class="form-group">
+                            <label for="numero_expediente">Número de Expediente:</label>
+                            <input type="text" name="NUMERO_EXPEDIENTE" id="numero_expediente" 
+                                   placeholder="Ej: 123/2024-LAB" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tipo_procedimiento">Tipo de Procedimiento:</label>
+                            <input type="text" name="TIPO_PROCEDIMIENTO" id="tipo_procedimiento" 
+                                   placeholder="Ej: Laboral Ordinario" required>
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <h3>Fechas y Horarios</h3>
+                        
+                        <div class="form-group">
+                            <label for="fecha_acuerdo">Fecha de Acuerdo:</label>
+                            <input type="date" name="FECHA_DE_ACUERDO" id="fecha_acuerdo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hora_comparecencia">Hora de Comparecencia:</label>
+                            <input type="time" name="HORA_DE_COMPARECENCIA" id="hora_comparecencia" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fecha_publicacion">Fecha de Publicación:</label>
+                            <input type="date" name="FECHA_DE_PUBLICACION" id="fecha_publicacion" required>
+                        </div>
+
+                        <!-- CAMPOS PARA AUDIENCIA -->
+                        <div class="form-group campo-audiencia" style="display: none;">
+                            <label for="tipo_audiencia">Tipo de Audiencia a Cancelar:</label>
+                            <select name="AUDIENCIA" id="tipo_audiencia">
+                                <option value="">Seleccione el tipo</option>
+                                <option value="audiencia preliminar">Audiencia Preliminar</option>
+                                <option value="audiencia de juicio">Audiencia de Juicio</option>
+                                <option value="audiencia de conciliación">Audiencia de Conciliación</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group campo-audiencia" style="display: none;">
+                            <label for="fecha_audiencia">Fecha de Audiencia a Cancelar:</label>
+                            <input type="date" name="FECHA_AUDIENCIA" id="fecha_audiencia">
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <h3>Partes Involucradas</h3>
+                        
+                        <div class="form-group">
+                            <label for="parte_actora">Parte Actora (Demandante):</label>
+                            <input type="text" name="PARTE_ACTORA" id="parte_actora" 
+                                   placeholder="Nombre completo del demandante" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="parte_demandada">Parte Demandada:</label>
+                            <input type="text" name="PARTE_DEMANDADA" id="parte_demandada" 
+                                   placeholder="Nombre completo del demandado" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="secretario_acuerdos">Secretario de Acuerdos:</label>
+                            <input type="text" name="SECRETARIO_DE_ACUERDOS" id="secretario_acuerdos" 
+                                   placeholder="Nombre del secretario" required>
+                        </div>
+                    </div>
+
+                    <!-- ✅ CAMPOS PARA PAGOS -->
+                    <!-- ✅ CAMPOS PARA PAGO EN EFECTIVO -->
+                    <div class="form-group campo-pago-efectivo" style="display: none;">
+                        <label for="personalidad">Personalidad del Representante:</label>
+                        <input type="text" name="PERSONALIDAD" id="personalidad" 
+                            placeholder="Ej: Representante Legal, Apoderado">
+                    </div>
+
+                    <div class="form-group campo-pago-efectivo" style="display: none;">
+                        <label for="representante_demandada">Representante de la Demandada:</label>
+                        <input type="text" name="REPRESENTANTE_DEMANDADA" id="representante_demandada" 
+                            placeholder="Nombre del representante">
+                    </div>
+
+                    <div class="form-group campo-pago-efectivo" style="display: none;">
+                        <label for="cantidad">Cantidad del Pago:</label>
+                        <input type="text" name="CANTIDAD" id="cantidad" 
+                            placeholder="Ej: $10,000.00 (Diez mil pesos 00/100 M.N.)">
+                    </div>
+
+                    <div class="form-group campo-pago-efectivo" style="display: none;">
+                        <label for="fecha_convenio">Fecha del Convenio:</label>
+                        <input type="date" name="FECHA_CONVENIO" id="fecha_convenio">
+                    </div>
+
+                    <!-- ✅ CAMPOS PARA PAGO CON CHEQUE/TRANSFERENCIA -->
+                    <div class="form-group campo-pago-cheque-transferencia" style="display: none;">
+                        <label for="personalidad_cheque">Personalidad del Representante:</label>
+                        <input type="text" name="PERSONALIDAD" id="personalidad_cheque" 
+                            placeholder="Ej: Representante Legal, Apoderado">
+                    </div>
+
+                    <div class="form-group campo-pago-cheque-transferencia" style="display: none;">
+                        <label for="representante_demandada_cheque">Representante de la Demandada:</label>
+                        <input type="text" name="REPRESENTANTE_DEMANDADA" id="representante_demandada_cheque" 
+                            placeholder="Nombre del representante">
+                    </div>
+
+                    <div class="form-group campo-pago-cheque-transferencia" style="display: none;">
+                        <label for="titulo_credito">Título de Crédito:</label>
+                        <input type="text" name="TITULO_CREDITO" id="titulo_credito" 
+                            placeholder="Ej: Cheque número 12345, Transferencia referencia ABC123">
+                    </div>
+
+                    <div class="form-group campo-pago-cheque-transferencia" style="display: none;">
+                        <label for="fecha_convenio_cheque">Fecha del Convenio:</label>
+                        <input type="date" name="FECHA_CONVENIO" id="fecha_convenio_cheque">
+                    </div>
+
+                    <div class="form-group campo-pago-transferencia" style="display: none;">
+                        <label for="cuenta_bancaria">Cuenta Bancaria:</label>
+                        <input type="text" name="CUENTA_BANCARIA" id="cuenta_bancaria" 
+                            placeholder="Ej: Cuenta 1234-5678-9012, CLABE 012345678901234567">
+                    </div>
+
+                    <!-- ✅ CAMPOS PARA "SE DA POR PAGADO" -->
+                    <div class="form-group campo-pago-cumplido" style="display: none;">
+                        <label for="cantidad_cumplido">Cantidad del Pago:</label>
+                        <input type="text" name="CANTIDAD" id="cantidad_cumplido" 
+                            placeholder="Ej: $10,000.00 (Diez mil pesos 00/100 M.N.)">
+                    </div>
+
+                    <!-- ✅ CAMPOS PARA PAGO PARCIAL CON CHEQUE -->
+                    <div class="form-group campo-pago-parcial-cheque" style="display: none;">
+                        <label for="personalidad_parcial">Personalidad del Representante:</label>
+                        <input type="text" name="PERSONALIDAD" id="personalidad_parcial" 
+                            placeholder="Ej: Representante Legal, Apoderado">
+                    </div>
+
+                    <div class="form-group campo-pago-parcial-cheque" style="display: none;">
+                        <label for="representante_demandada_parcial">Representante de la Demandada:</label>
+                        <input type="text" name="REPRESENTANTE_DEMANDADA" id="representante_demandada_parcial" 
+                            placeholder="Nombre del representante">
+                    </div>
+
+                    <div class="form-group campo-pago-parcial-cheque" style="display: none;">
+                        <label for="titulo_credito_parcial">Título de Crédito:</label>
+                        <input type="text" name="TITULO_CREDITO" id="titulo_credito_parcial" 
+                            placeholder="Ej: Cheque número 12345">
+                    </div>
+
+                    <div class="form-group campo-pago-parcial-cheque" style="display: none;">
+                        <label for="fecha_convenio_parcial">Fecha del Convenio:</label>
+                        <input type="date" name="FECHA_CONVENIO" id="fecha_convenio_parcial">
+                    </div>
+
+                    <div class="form-group campo-pago-parcial-cheque" style="display: none;">
+                        <label for="pago_parcial">Tipo de Pago Parcial:</label>
+                        <input type="text" name="PAGO_PARCIAL" id="pago_parcial" 
+                            placeholder="Ej: primer, segundo, tercer">
+                    </div>
+
+                    <div class="form-group campo-pago-parcial-cheque" style="display: none;">
+                        <label for="cantidad_pendiente">Cantidad Pendiente:</label>
+                        <input type="text" name="CANTIDAD_PENDIENTE" id="cantidad_pendiente" 
+                            placeholder="Ej: $5,000.00 (Cinco mil pesos 00/100 M.N.)">
+                    </div>
+
+                    <button type="submit" class="btn-generar">
+                        🚀 Generar Documento
+                    </button>
+                </form>
+            </div>
+
+            <!-- COLUMNA DERECHA - VISTA PREVIA -->
+            <div class="column">
+                <div class="preview-header">
+                    <h3>Vista Previa del Documento</h3>
+                    <button type="button" class="btn-preview">
+                        🔄 Actualizar Vista
+                    </button>
+                </div>
+                <div class="preview-content" id="vistaPrevia">
+                    <p style="color: #666; font-style: italic; text-align: center; margin-top: 50%;">
+                        Complete el formulario y haga click en "Actualizar Vista" para previsualizar el documento.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="creditos">
+            Creado por Saúl Flores
+        </div>
+    </div>
+
+<script>
+// ✅ MODO NOCTURNO - SOLO ICONOS (SIN TEXTO)
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 Inicializando modo nocturno (solo iconos)...');
+    
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    if (!themeToggle) {
+        console.error('❌ No se encontró el botón themeToggle');
+        return;
+    }
+
+    // Cargar tema guardado
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    console.log('Tema guardado:', savedTheme);
+    
+    // Aplicar tema inmediatamente (solo clases, sin texto)
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+        console.log('✅ Tema oscuro aplicado al cargar');
+    } else {
+        body.classList.remove('dark-mode');
+        console.log('✅ Tema claro aplicado al cargar');
+    }
+
+    // Alternar tema - SIN CAMBIAR TEXTO
+    themeToggle.addEventListener('click', function() {
+        console.log('🎯 Botón de tema CLICKEADO');
+        
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+            console.log('✅ Cambiado a modo claro');
+        } else {
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+            console.log('✅ Cambiado a modo oscuro');
+        }
+    });
+});
+
+// ✅ CONTROL DE CAMPOS DEL FORMULARIO
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ Inicializando controles de formulario...');
+    
+    const tipoDocumento = document.getElementById('tipo_documento');
+    if (!tipoDocumento) {
+        console.error('❌ No se encontró tipo_documento');
+        return;
+    }
+
+    function actualizarCampos() {
+        const tipo = tipoDocumento.value;
+        console.log('Tipo de documento cambiado:', tipo);
+        
+        // 1. Controlar campos de audiencia
+        const camposAudiencia = document.querySelectorAll('.campo-audiencia');
+        camposAudiencia.forEach(campo => {
+            const shouldShow = (tipo === 'desistimiento_sin_efectos');
+            campo.style.display = shouldShow ? 'block' : 'none';
+            
+            const inputs = campo.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.required = shouldShow;
+            });
+        });
+        
+        // 2. Controlar campos de pago específicos
+        const camposPagoEfectivo = document.querySelectorAll('.campo-pago-efectivo');
+        const camposPagoCheque = document.querySelectorAll('.campo-pago-cheque-transferencia');
+        const camposPagoTransferencia = document.querySelectorAll('.campo-pago-transferencia');
+        const camposPagoCumplido = document.querySelectorAll('.campo-pago-cumplido');
+        const camposPagoParcialCheque = document.querySelectorAll('.campo-pago-parcial-cheque');
+        
+        // Ocultar todos primero y quitar requerido
+        const todosCamposPago = [
+            ...camposPagoEfectivo,
+            ...camposPagoCheque, 
+            ...camposPagoTransferencia,
+            ...camposPagoCumplido,
+            ...camposPagoParcialCheque
+        ];
+        
+        todosCamposPago.forEach(campo => {
+            campo.style.display = 'none';
+            const inputs = campo.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.required = false;
+            });
+        });
+        
+        // Mostrar según el tipo y poner requerido
+        if (tipo === 'pago_efectivo') {
+            camposPagoEfectivo.forEach(campo => {
+                campo.style.display = 'block';
+                const inputs = campo.querySelectorAll('input, select');
+                inputs.forEach(input => input.required = true);
+            });
+        } else if (tipo === 'pago_cheque') {
+            camposPagoCheque.forEach(campo => {
+                campo.style.display = 'block';
+                const inputs = campo.querySelectorAll('input, select');
+                inputs.forEach(input => input.required = true);
+            });
+        } else if (tipo === 'pago_transferencia') {
+            camposPagoTransferencia.forEach(campo => {
+                campo.style.display = 'block';
+                const inputs = campo.querySelectorAll('input, select');
+                inputs.forEach(input => input.required = true);
+            });
+        } else if (tipo === 'pago_cumplido') {
+            camposPagoCumplido.forEach(campo => {
+                campo.style.display = 'block';
+                const inputs = campo.querySelectorAll('input, select');
+                inputs.forEach(input => input.required = true);
+            });  
+        } else if (tipo === 'pago_parcial_cheque') {
+            console.log('Mostrando campos de pago parcial con cheque');
+            camposPagoParcialCheque.forEach(campo => {
+                campo.style.display = 'block';
+                const inputs = campo.querySelectorAll('input, select');
+                inputs.forEach(input => input.required = true);
+            });
+        }
+    }
+
+    tipoDocumento.addEventListener('change', actualizarCampos);
+    
+    // Ejecutar al cargar
+    actualizarCampos();
+});
+
+// ✅ VERIFICAR QUE EL BOTÓN FUNCIONE
+document.addEventListener('DOMContentLoaded', function() {
+    const documentForm = document.getElementById('documentForm');
+    if (documentForm) {
+        documentForm.addEventListener('submit', function(e) {
+            console.log('✅ Formulario enviándose...');
+            // No usar preventDefault() - dejar que se envíe normalmente
+        });
+    }
+});
+
+console.log('✅ Script completamente cargado - esperando DOM...');
+</script>
+</body>
+</html>

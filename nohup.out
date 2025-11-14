@@ -1,0 +1,102 @@
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W005) URL namespace 'admin' isn't unique. You may not be able to reverse all URLs in this namespace
+
+System check identified 1 issue (0 silenced).
+[14/Nov/2025 21:19:30] "GET / HTTP/1.1" 200 15677
+[14/Nov/2025 21:19:30] "GET /static/generador_docs/css/style.css HTTP/1.1" 304 0
+[14/Nov/2025 21:19:30] "GET /static/generador_docs/js/vista-previa.js HTTP/1.1" 304 0
+Not Found: /favicon.ico
+[14/Nov/2025 21:19:30] "GET /favicon.ico HTTP/1.1" 404 2964
+[14/Nov/2025 21:19:55] "POST /generar/ HTTP/1.1" 200 29420
+/Volumes/Memoria Extra Mac Mini Saul/Desktop/PactoMaker/generador_docs/views.py changed, reloading.
+Performing system checks...
+
+November 14, 2025 - 21:18:19
+Django version 5.2.7, using settings 'PactoMaker.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W005) URL namespace 'admin' isn't unique. You may not be able to reverse all URLs in this namespace
+
+System check identified 1 issue (0 silenced).
+/Volumes/Memoria Extra Mac Mini Saul/Desktop/PactoMaker/generador_docs/views.py changed, reloading.
+Performing system checks...
+
+November 14, 2025 - 21:31:34
+Django version 5.2.7, using settings 'PactoMaker.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W005) URL namespace 'admin' isn't unique. You may not be able to reverse all URLs in this namespace
+
+System check identified 1 issue (0 silenced).
+/Volumes/Memoria Extra Mac Mini Saul/Desktop/PactoMaker/generador_docs/views.py changed, reloading.
+Performing system checks...
+
+November 14, 2025 - 21:31:39
+Django version 5.2.7, using settings 'PactoMaker.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W005) URL namespace 'admin' isn't unique. You may not be able to reverse all URLs in this namespace
+
+System check identified 1 issue (0 silenced).
+[14/Nov/2025 21:35:17] "GET / HTTP/1.1" 200 19489
+[14/Nov/2025 21:35:40] "POST /generar/ HTTP/1.1" 200 29414
+[14/Nov/2025 21:37:35] "POST /generar/ HTTP/1.1" 200 59
+/Volumes/Memoria Extra Mac Mini Saul/Desktop/PactoMaker/generador_docs/views.py changed, reloading.
+Performing system checks...
+
+November 14, 2025 - 21:31:41
+Django version 5.2.7, using settings 'PactoMaker.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W005) URL namespace 'admin' isn't unique. You may not be able to reverse all URLs in this namespace
+
+System check identified 1 issue (0 silenced).
+/Volumes/Memoria Extra Mac Mini Saul/Desktop/PactoMaker/generador_docs/views.py changed, reloading.
+Performing system checks...
+
+November 14, 2025 - 21:41:45
+Django version 5.2.7, using settings 'PactoMaker.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W005) URL namespace 'admin' isn't unique. You may not be able to reverse all URLs in this namespace
+
+System check identified 1 issue (0 silenced).
+[14/Nov/2025 21:42:00] "POST /generar/ HTTP/1.1" 200 31936
